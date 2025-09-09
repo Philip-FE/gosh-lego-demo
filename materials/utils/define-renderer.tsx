@@ -35,13 +35,30 @@ export type RendererDef = {
   children?: string;
 };
 
-export const defineRenderer = <T extends RendererDef>(
+export const defineRenderer = <
+  T extends RendererDef,
+  P extends Record<string, any> = {}
+>(
+  name: string,
   Renderer: FunctionComponent<{
-    options?: Partial<T["options"]>;
-    events?: Partial<Events<T["events"]>>;
-    children?: Partial<Record<Exclude<T["children"], undefined>, ReactNode>>;
-  }>
-) => Renderer;
+    options?: T["options"] extends Record<string, any>
+      ? Partial<T["options"]>
+      : undefined;
+    events?: T["events"] extends Record<string, any>
+      ? Partial<Events<T["events"]>>
+      : undefined;
+    children?: T["children"] extends string
+      ? Partial<Record<NonNullable<T["children"]>, ReactNode>>
+      : undefined;
+    style?: Record<string, any>;
+    id?: string;
+    className?: string;
+  }> &
+    P
+) => {
+  Renderer.displayName = name;
+  return Renderer;
+};
 
 export function useEvents<
   T extends Record<

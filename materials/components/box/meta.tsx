@@ -3,7 +3,6 @@ import Box from "./index";
 
 export default defineMeta(Box, {
   type: "component",
-  name: "Box",
   label: "容器",
   icon: <div>Box</div>,
   options: {
@@ -28,7 +27,14 @@ export default defineMeta(Box, {
           label: "跳转到google",
           args: () => null,
         },
+        alert: {
+          label: "弹窗",
+          args: () => null,
+        },
       },
     },
+  },
+  children: {
+    children: "子组件",
   },
 });
