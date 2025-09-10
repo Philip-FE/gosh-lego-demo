@@ -21,6 +21,8 @@ export interface Schema {
   template: string;
   // 模板配置
   options?: OptionsConfig;
+  // 模板样式
+  style?: Record<string, any>;
   // 模板事件
   events?: EventsConfig;
   // 组件在模板中的排列布局

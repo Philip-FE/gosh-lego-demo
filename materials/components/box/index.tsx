@@ -8,7 +8,7 @@ const Box = defineRenderer<{
     onClick: "jumpUrl" | "jumpGoogle" | "alert";
   };
   children: "children";
-}>("Box", ({ style = {}, options, events, children, ...rest }) => {
+}>(({ style = {}, options, events, children, ...rest }) => {
   const emit = useEvents(events, {
     onClick: (action, args) => {
       switch (action) {
@@ -35,7 +35,6 @@ const Box = defineRenderer<{
       }}
       className="flex flex-col bg-cyan-100"
       onClick={() => {
-        console.log("hhhhh");
         emit("onClick");
       }}
       {...rest}

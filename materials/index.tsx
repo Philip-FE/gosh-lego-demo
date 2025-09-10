@@ -1,4 +1,5 @@
 import type { defineRenderer } from "./utils/define-renderer";
+import { getName } from "./utils/get-name";
 
 const componentRendererModules = import.meta.glob("./components/*/index.tsx", {
   eager: true,
@@ -12,25 +13,21 @@ type ComponentType = ReturnType<typeof defineRenderer<any>>;
 export const Components: Record<string, ComponentType> = {};
 export const Templates: Record<string, ComponentType> = {};
 
-for (const module of Object.values(componentRendererModules)) {
+for (const [path, module] of Object.entries(componentRendererModules)) {
   const { default: Component } = module as { default: ComponentType };
-  if (Component.displayName) {
-    Components[Component.displayName] = Component;
-  } else {
-    console.warn("注册失败，组件没有displayName", Component);
-  }
+  Component.displayName = getName(path, "components", "index");
+  Components[Component.displayName] = Component;
 }
 
-for (const module of Object.values(templateRendererModules)) {
+for (const [path, module] of Object.entries(templateRendererModules)) {
   const { default: Component } = module as { default: ComponentType };
-  if (Component.displayName) {
-    Templates[Component.displayName] = Component;
-  } else {
-    console.warn("注册失败，组件没有displayName", Component);
-  }
+  Component.displayName = getName(path, "templates", "index");
+  Templates[Component.displayName] = Component;
 }
 
 export const Materials = {
   Components,
   Templates,
 };
+
+console.log(Materials);

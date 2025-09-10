@@ -1,17 +1,17 @@
+import { Form, Input } from "antd";
 import { defineMeta } from "../../utils/define-meta";
 import Box from "./index";
 
 export default defineMeta(Box, {
-  type: "component",
   label: "容器",
   icon: <div>Box</div>,
-  options: {
-    default: {
-      title: "",
-    },
-    form: () => {
-      return null;
-    },
+  desc: "这是一个容器",
+  options: () => {
+    return (
+      <Form.Item label="Box标题" name="title">
+        <Input />
+      </Form.Item>
+    );
   },
   events: {
     onClick: {
@@ -35,6 +35,6 @@ export default defineMeta(Box, {
     },
   },
   children: {
-    children: "子组件",
+    children: "内容",
   },
 });

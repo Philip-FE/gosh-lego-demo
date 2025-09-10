@@ -5,7 +5,7 @@ import { immer } from "zustand/middleware/immer";
 const demoSchema = {
   template: "Empty",
   children: {
-    children: ["1"],
+    children: ["1", "3"],
   },
   components: {
     "1": {
@@ -28,6 +28,21 @@ const demoSchema = {
     },
     "2": {
       id: "2",
+      name: "Button",
+      options: {
+        text: "click me",
+      },
+      events: {
+        onClick: {
+          action: "alert",
+          args: {
+            content: "clicked button",
+          },
+        },
+      },
+    },
+    "3": {
+      id: "3",
       name: "Button",
       options: {
         text: "click me",

@@ -39,7 +39,6 @@ export const defineRenderer = <
   T extends RendererDef,
   P extends Record<string, any> = {}
 >(
-  name: string,
   Renderer: FunctionComponent<{
     options?: T["options"] extends Record<string, any>
       ? Partial<T["options"]>
@@ -53,12 +52,12 @@ export const defineRenderer = <
     style?: Record<string, any>;
     id?: string;
     className?: string;
+    ["data-component-id"]: string;
   }> &
     P
 ) => {
-  Renderer.displayName = name;
   return Renderer;
-};
+};;
 
 export function useEvents<
   T extends Record<

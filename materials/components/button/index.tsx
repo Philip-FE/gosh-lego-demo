@@ -8,7 +8,7 @@ const Button = defineRenderer<{
     onClick: "alert";
   };
   children: any;
-}>("Button", ({ style = {}, options, events, ...rest }) => {
+}>(({ style = {}, options, events, ...rest }) => {
   const emit = useEvents(events, {
     onClick: (action, args: { content: string }, e: React.MouseEvent) => {
       e.stopPropagation();
@@ -26,7 +26,7 @@ const Button = defineRenderer<{
       }}
       {...rest}
     >
-      {options?.text}
+      {options?.text || "按钮"}
     </button>
   );
 });

@@ -14,8 +14,8 @@ const UnitRenderer = ({
   type: "component" | "template";
 }) => {
   const schema = SchemaContainer.useContainer();
-  const { Component, options, events, children, name } = useMemo(() => {
-    const { options, events, children } =
+  const { Component, options, events, children, name, style } = useMemo(() => {
+    const { options, events, children, style } =
       type === "component" ? schema.components[id] : schema;
     const name =
       type === "component" ? schema.components[id].name : schema.template;
@@ -23,24 +23,28 @@ const UnitRenderer = ({
       type === "component"
         ? Materials.Components[name]
         : Materials.Templates[name];
-    return { Component, options, events, children, name };
+    return { Component, options, events, children, name, style };
   }, [schema, id, type]);
   return (
     <ErrorBoundary fallback={`${name}@${id} 渲染出错`}>
-      <Component id={id} options={options} events={events}>
+      <Component
+        id={id}
+        data-component-id={id}
+        style={style}
+        options={options}
+        events={events}
+      >
         {(function () {
           if (!children) {
             return undefined;
           }
           const childrenElements: Record<string, ReactNode> = {};
           for (const [key, childIDs] of Object.entries(children)) {
-            childrenElements[key] = (
-              <>
-                {childIDs.map((childID) => (
-                  <UnitRenderer key={childID} id={childID} type="component" />
-                ))}
-              </>
-            );
+            childrenElements[key] = childIDs
+              .filter((childID) => !!schema.components[childID])
+              .map((childID) => (
+                <UnitRenderer key={childID} id={childID} type="component" />
+              ));
           }
           return childrenElements;
         })()}

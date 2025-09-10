@@ -1,11 +1,18 @@
 import { defineRenderer } from "../../utils/define-renderer";
 
 const Empty = defineRenderer<{
-  options: any;
+  options: {
+    title: string;
+  };
   events: any;
   children: "children";
-}>("Empty", ({ children }) => {
-  return <>{children?.children}</>;
+}>(({ style = {}, options, children, className }) => {
+  return (
+    <div style={style} className={className}>
+      {options?.title && <div>{options?.title}</div>}
+      {children?.children}
+    </div>
+  );
 });
 
 export default Empty;

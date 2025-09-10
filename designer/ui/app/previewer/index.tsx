@@ -1,8 +1,10 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Renderer } from "../../../../renderer";
 import { useSchemaStore } from "../../../store/schema";
 import { createRoot } from "react-dom/client";
 import { useMemoizedFn } from "ahooks";
+import { useMaterialStore } from "../../../store/material";
+import styles from "./index.module.css";
 
 const PREVIEWER_IFRAME_SRC_DOC = `
 <!DOCTYPE html>
@@ -18,9 +20,42 @@ const PREVIEWER_IFRAME_SRC_DOC = `
 </html>
 `;
 
-const AppRenderer = () => {
+const AppRenderer = ({ contentWindow }: { contentWindow: Window | null }) => {
   const { schema } = useSchemaStore();
-  return <Renderer schema={schema} />;
+  const { selectComponent, componentID, materialType } = useMaterialStore();
+  useEffect(() => {
+    if (materialType === "component") {
+      const els = contentWindow?.document.querySelectorAll(
+        `[data-component-id="${componentID}"]`
+      );
+      if (els) {
+        els.forEach((el) => {
+          el.classList.add(styles.highlight);
+        });
+        return () => {
+          els.forEach((el) => {
+            el.classList.remove(styles.highlight);
+          });
+        };
+      }
+    }
+  }, [materialType, componentID]);
+  return (
+    <div
+      className="w-full h-full"
+      onContextMenu={(e) => {
+        e.preventDefault();
+        const target = e.target as HTMLElement;
+        const closestComponentElement = target.closest("[data-component-id]");
+        if (closestComponentElement && materialType === "component") {
+          const id = closestComponentElement.getAttribute("data-component-id");
+          selectComponent(id!);
+        }
+      }}
+    >
+      <Renderer schema={schema} />
+    </div>
+  );
 };
 
 export const Previewer = () => {
@@ -37,21 +72,29 @@ export const Previewer = () => {
       });
   });
   return (
-    <iframe
-      ref={ref}
-      className="w-[390px] h-[80%] border rounded-2xl"
-      srcDoc={PREVIEWER_IFRAME_SRC_DOC}
-      onLoad={() => {
-        if (ref.current) {
-          const contentWindow = ref.current.contentWindow;
-          if (contentWindow) {
-            createRoot(contentWindow.document.getElementById("root")!).render(
-              <AppRenderer />
-            );
-            syncStyles();
+    <div className="w-[390px] h-[80%] border rounded-2xl p-5">
+      <iframe
+        ref={ref}
+        className="h-full w-full border"
+        srcDoc={PREVIEWER_IFRAME_SRC_DOC}
+        onContextMenu={(e) => {
+          console.log(e);
+        }}
+        onLoad={() => {
+          if (ref.current) {
+            const contentWindow = ref.current.contentWindow;
+            if (contentWindow) {
+              const root = contentWindow.document.getElementById("root");
+              if (root) {
+                createRoot(root).render(
+                  <AppRenderer contentWindow={contentWindow} />
+                );
+                syncStyles();
+              }
+            }
           }
-        }
-      }}
-    />
+        }}
+      />
+    </div>
   );
 };
