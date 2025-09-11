@@ -1,12 +1,9 @@
 import { useSchemaStore } from "../../../store/schema";
 import { useMaterialStore } from "../../../store/material";
-import { useMemoizedFn } from "ahooks";
-import { set, get } from "es-toolkit/compat";
-import type { EventsConfig, OptionsConfig } from "../../../../common/types";
 import { Tabs } from "antd";
 import { useMemo } from "react";
 import { OptionsForm } from "./options";
-import { materialMetas } from "../../../../materials/meta";
+import { materialMetas } from "@materials/meta";
 import { StylesForm } from "./style";
 import { EventsForm } from "./events";
 

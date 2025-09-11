@@ -37,7 +37,7 @@ export type RendererDef = {
 
 export const defineRenderer = <
   T extends RendererDef,
-  P extends Record<string, any> = {}
+  P extends Record<string, any> = {},
 >(
   Renderer: FunctionComponent<{
     options?: T["options"] extends Record<string, any>
@@ -52,7 +52,7 @@ export const defineRenderer = <
     style?: Record<string, any>;
     id?: string;
     className?: string;
-    ["data-component-id"]: string;
+    ["data-component-id"]?: string;
   }> &
     P
 ) => {

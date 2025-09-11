@@ -72,29 +72,34 @@ export const Previewer = () => {
       });
   });
   return (
-    <div className="w-[390px] h-[80%] border rounded-2xl p-5">
-      <iframe
-        ref={ref}
-        className="h-full w-full border"
-        srcDoc={PREVIEWER_IFRAME_SRC_DOC}
-        onContextMenu={(e) => {
-          console.log(e);
-        }}
-        onLoad={() => {
-          if (ref.current) {
-            const contentWindow = ref.current.contentWindow;
-            if (contentWindow) {
-              const root = contentWindow.document.getElementById("root");
-              if (root) {
-                createRoot(root).render(
-                  <AppRenderer contentWindow={contentWindow} />
-                );
-                syncStyles();
+    <div className="flex flex-col h-full justify-center items-center gap-5">
+      <div className="flex items-center border rounded h-9 px-5">
+        <div>右击组件选中</div>
+      </div>
+      <div className="w-[390px] h-[80%] border rounded-2xl p-5">
+        <iframe
+          ref={ref}
+          className="h-full w-full border"
+          srcDoc={PREVIEWER_IFRAME_SRC_DOC}
+          onContextMenu={(e) => {
+            console.log(e);
+          }}
+          onLoad={() => {
+            if (ref.current) {
+              const contentWindow = ref.current.contentWindow;
+              if (contentWindow) {
+                const root = contentWindow.document.getElementById("root");
+                if (root) {
+                  createRoot(root).render(
+                    <AppRenderer contentWindow={contentWindow} />
+                  );
+                  syncStyles();
+                }
               }
             }
-          }
-        }}
-      />
+          }}
+        />
+      </div>
     </div>
   );
 };
