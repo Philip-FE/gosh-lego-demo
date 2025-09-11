@@ -2,6 +2,9 @@ import clsx from "clsx";
 import { materialMetas } from "../../../../../materials/meta";
 import { useSchemaStore } from "../../../../store/schema";
 
+let newID = 100;
+const generateID = () => String(newID++);
+
 const ComponentsGallery = () => {
   const { updateSchema } = useSchemaStore();
   return (
@@ -12,7 +15,7 @@ const ComponentsGallery = () => {
           <div
             onClick={() => {
               updateSchema((schema) => {
-                const id = crypto.randomUUID();
+                const id = generateID();
                 schema.components[id] = {
                   name: meta.name,
                   id,

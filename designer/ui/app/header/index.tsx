@@ -12,12 +12,22 @@ export const Header = () => {
       <Button
         onClick={() => {
           copy(JSON.stringify(schema, null, 2));
-          message.success("复制成功，去把内容粘贴到apps/demo/schema.ts");
+          message.success(
+            "复制成功，把内容粘贴到app/no-treeshaking-renderer/schema.json"
+          );
         }}
       >
         复制schema
       </Button>
       <Button
+        onClick={() => {
+          window.open("/no-tree-shaking-renderer.html");
+        }}
+      >
+        查看应用（无treeshaking）
+      </Button>
+      <Button
+        type="primary"
         onClick={async () => {
           const code = await generateAppCode(schema);
           copy(code);
@@ -27,11 +37,12 @@ export const Header = () => {
         复制代码
       </Button>
       <Button
+        type="primary"
         onClick={() => {
-          window.open("/demo.html");
+          window.open("/tree-shaking-renderer.html");
         }}
       >
-        查看应用
+        查看应用（treeshaking）
       </Button>
     </div>
   );

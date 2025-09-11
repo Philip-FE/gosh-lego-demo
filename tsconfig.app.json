@@ -25,7 +25,9 @@
     "paths": {
       "@materials": ["./materials"],
       "@materials/*": ["./materials/*"],
-      "@generator/*": ["./generator/*"]
+      "@generator/*": ["./generator/*"],
+      "@renderer": ["./renderer"],
+      "@renderer/*": ["./renderer/*"]
     }
   },
   "include": ["designer", "materials", "designer", "apps"]

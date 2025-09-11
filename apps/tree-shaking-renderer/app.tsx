@@ -5,7 +5,7 @@ import { get } from "es-toolkit/compat";
 
 const schema = {
   template: "Empty",
-  children: { children: ["1", "3"] },
+  children: { children: ["1", "3", "9", "10"] },
   components: {
     "1": {
       id: "1",
@@ -31,11 +31,10 @@ const schema = {
       events: {
         onClick: { action: "alert", args: { content: "clicked button" } },
       },
-      style: { margin: 13 },
     },
+    "9": { name: "Box", id: "9", options: { title: "哈哈哈哈哈哈哈哈哈哈" } },
+    "10": { name: "Button", id: "10", options: {} },
   },
-  options: { title: "放到分手的分手大师" },
-  style: { margin: 8 },
 } as any;
 
 export const App = () => {
@@ -70,6 +69,22 @@ export const App = () => {
               style={get(schema, ["components", "3", "style"])}
               options={get(schema, ["components", "3", "options"])}
               events={get(schema, ["components", "3", "events"])}
+            ></Button>
+
+            <Box
+              style={get(schema, ["components", "9", "style"])}
+              options={get(schema, ["components", "9", "options"])}
+              events={get(schema, ["components", "9", "events"])}
+            >
+              {{
+                children: "hhhhhhh",
+              }}
+            </Box>
+
+            <Button
+              style={get(schema, ["components", "10", "style"])}
+              options={get(schema, ["components", "10", "options"])}
+              events={get(schema, ["components", "10", "events"])}
             ></Button>
           </>
         ),

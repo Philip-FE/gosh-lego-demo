@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { Renderer } from "../../../../renderer";
 import { useSchemaStore } from "../../../store/schema";
 import { createRoot } from "react-dom/client";
-import { useMemoizedFn } from "ahooks";
 import { useMaterialStore } from "../../../store/material";
 import styles from "./index.module.css";
 
@@ -19,6 +18,14 @@ const PREVIEWER_IFRAME_SRC_DOC = `
 </body>
 </html>
 `;
+
+const syncStyles = (targetDocument: Document) => {
+  const head = targetDocument.head;
+  if (!head) return;
+  document.querySelectorAll("link[rel='stylesheet'], style").forEach((node) => {
+    head.appendChild(node.cloneNode(true));
+  });
+};
 
 const AppRenderer = ({ contentWindow }: { contentWindow: Window | null }) => {
   const { schema } = useSchemaStore();
@@ -59,41 +66,49 @@ const AppRenderer = ({ contentWindow }: { contentWindow: Window | null }) => {
 };
 
 export const Previewer = () => {
-  const ref = useRef<HTMLIFrameElement>(null);
-  const syncStyles = useMemoizedFn(() => {
-    const iframe = ref.current;
-    if (!iframe) return;
-    const head = iframe.contentDocument?.head;
-    if (!head) return;
-    document
-      .querySelectorAll("link[rel='stylesheet'], style")
-      .forEach((node) => {
-        head.appendChild(node.cloneNode(true));
-      });
-  });
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { materialType } = useMaterialStore();
   return (
     <div className="flex flex-col h-full justify-center items-center gap-5">
-      <div className="flex items-center border rounded h-9 px-5">
-        <div>右击组件选中</div>
+      <div className="flex items-center h-9 px-5 gap-3">
+        {materialType === "component" && <div>右击组件选中</div>}
+        {/* <Button
+          type="primary"
+          onClick={() => {
+            const newWin = window.open("", "_blank");
+            if (!newWin) {
+              return;
+            }
+            newWin.document.write(PREVIEWER_IFRAME_SRC_DOC);
+            newWin.document.close();
+            newWin.onload = () => {
+              const container = newWin.document.getElementById("root");
+              if (container) {
+                const root = createRoot(container);
+                root.render(<Renderer schema={schema} />);
+                syncStyles(newWin.document);
+              }
+            };
+          }}
+        >
+          预览
+        </Button> */}
       </div>
       <div className="w-[390px] h-[80%] border rounded-2xl p-5">
         <iframe
-          ref={ref}
+          ref={iframeRef}
           className="h-full w-full border"
           srcDoc={PREVIEWER_IFRAME_SRC_DOC}
-          onContextMenu={(e) => {
-            console.log(e);
-          }}
           onLoad={() => {
-            if (ref.current) {
-              const contentWindow = ref.current.contentWindow;
+            if (iframeRef.current) {
+              const contentWindow = iframeRef.current.contentWindow;
               if (contentWindow) {
                 const root = contentWindow.document.getElementById("root");
                 if (root) {
                   createRoot(root).render(
                     <AppRenderer contentWindow={contentWindow} />
                   );
-                  syncStyles();
+                  syncStyles(contentWindow.document);
                 }
               }
             }

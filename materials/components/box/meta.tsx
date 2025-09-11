@@ -20,7 +20,11 @@ export default defineMeta(Box, {
         jumpUrl: {
           label: "链接跳转",
           args: () => {
-            return null;
+            return (
+              <Form.Item label="链接" name="url">
+                <Input />
+              </Form.Item>
+            );
           },
         },
         jumpGoogle: {
@@ -29,7 +33,13 @@ export default defineMeta(Box, {
         },
         alert: {
           label: "弹窗",
-          args: () => null,
+          args: () => {
+            return (
+              <Form.Item label="消息" name="message">
+                <Input />
+              </Form.Item>
+            );
+          },
         },
       },
     },

@@ -10,6 +10,7 @@ export default defineConfig({
     alias: {
       "@materials": path.resolve(__dirname, "materials"),
       "@generator": path.resolve(__dirname, "generator"),
+      "@renderer": path.resolve(__dirname, "renderer"),
     },
   },
 });

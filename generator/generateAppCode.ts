@@ -42,7 +42,7 @@ export const generateAppCode = async (schema: Schema) => {
               const childIds = children[key] || [];
               if (childIds.length > 0) {
                 childrenElements[key] =
-                  `<>${childIds.map((childID) => getJsx(childID)).join("\n")}</>`;
+                  `<>${childIds.map((childID) => getJsx(childID)).join("")}</>`;
               }
             });
             return `{{${Object.entries(childrenElements).map(
