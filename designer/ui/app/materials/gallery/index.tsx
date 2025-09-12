@@ -19,7 +19,7 @@ const ComponentsGallery = () => {
                 schema.components[id] = {
                   name: meta.name,
                   id,
-                  options: {},
+                  options: meta.defaultOptions,
                 };
                 // 这里只是做demo，直接写死，实际是要把组件拖到模板的组件树中
                 schema.children?.children.push(id);
@@ -48,6 +48,7 @@ const TemplateGallery = () => {
             onClick={() => {
               updateSchema((schema) => {
                 schema.template = meta.name;
+                schema.options = meta.defaultOptions;
               });
             }}
             className={clsx(

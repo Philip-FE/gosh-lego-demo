@@ -13,6 +13,9 @@ export default defineMeta(Box, {
       </Form.Item>
     );
   },
+  defaultOptions: {
+    title: "",
+  },
   events: {
     onClick: {
       label: "点击",
@@ -29,7 +32,6 @@ export default defineMeta(Box, {
         },
         jumpGoogle: {
           label: "跳转到google",
-          args: () => null,
         },
         alert: {
           label: "弹窗",

@@ -7,7 +7,6 @@ const Button = defineRenderer<{
   events: {
     onClick: "alert";
   };
-  children: any;
 }>(({ style = {}, options, events, ...rest }) => {
   const emit = useEvents(events, {
     onClick: (action, args: { content: string }, e: React.MouseEvent) => {

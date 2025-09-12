@@ -13,15 +13,15 @@ export default defineMeta(Button, {
       </Form.Item>
     );
   },
+  defaultOptions: {
+    text: "click me",
+  },
   events: {
     onClick: {
       label: "点击",
       actions: {
         alert: {
           label: "弹窗",
-          args: () => {
-            return null;
-          },
         },
       },
     },

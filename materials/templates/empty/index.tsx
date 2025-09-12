@@ -4,7 +4,6 @@ const Empty = defineRenderer<{
   options: {
     title: string;
   };
-  events: any;
   children: "children";
 }>(({ style = {}, options, children, className }) => {
   return (

@@ -1,8 +1,7 @@
 import type { FunctionComponent, ReactNode } from "react";
-import { defineRenderer } from "./define-renderer";
+import { defineRenderer, type RendererDef } from "./define-renderer";
 
-// Todo: 这里得研究下，这么写会导致defineRenderer时option, events和children必须写，即使没有也要写any
-type RendererType = ReturnType<typeof defineRenderer<any>>;
+type RendererType = ReturnType<typeof defineRenderer<RendererDef>>;
 
 type OptionsType<R extends RendererType> = NonNullable<
   Parameters<R>[0]["options"]
@@ -10,30 +9,87 @@ type OptionsType<R extends RendererType> = NonNullable<
 type EventsType<R extends RendererType> = NonNullable<
   Parameters<R>[0]["events"]
 >;
-type ChildrenType<R extends RendererType> = NonNullable<
-  Parameters<R>[0]["children"]
->;
-
 export function defineMeta<
   R extends RendererType,
   M extends {
+    /**
+     * 组件中文名
+     */
     label: string;
+    /**
+     * 组件图标
+     */
     icon: ReactNode;
+    /**
+     * 组件描述信息
+     */
     desc: ReactNode;
-    options?: FunctionComponent<{options?: OptionsType<R>; updateOptions?: (newOptions: OptionsType<R>) => void}>;
-    events?: Required<{
-      [EventKey in keyof EventsType<R>]: {
-        label: string;
-        actions: {
-          [ActionKey in NonNullable<EventsType<R>[EventKey]>["action"]]: {
-            label: string;
-            args: FunctionComponent<{options?: Record<string, any>; updateOptions?: (newOptions: Record<string, any>) => void }>;
-          };
-        };
-      };
-    }>;
-    children?: Record<keyof ChildrenType<R>, string>;
-  }
+  } & ("options" extends keyof R["rendererDef"]
+    ? {
+        /**
+         * 组件配置表单
+         */
+        options: FunctionComponent<{
+          options?: OptionsType<R>;
+          updateOptions?: (newOptions: OptionsType<R>) => void;
+        }>;
+        /**
+         * 组件默认配置
+         */
+        defaultOptions: Required<R["rendererDef"]["options"]>;
+      }
+    : { options?: never; defaultOptions?: never }) &
+    ("events" extends keyof R["rendererDef"]
+      ? {
+          /**
+           * 组件事件配置
+           */
+          events: Required<{
+            /**
+             * 事件名
+             */
+            [EventKey in keyof EventsType<R>]: {
+              /**
+               * 事件中文名
+               */
+              label: string;
+              /**
+               * 事件action配置
+               */
+              actions: {
+                /**
+                 * 事件action名
+                 */
+                [ActionKey in NonNullable<EventsType<R>[EventKey]>["action"]]: {
+                  /**
+                   * 事件action中文名
+                   */
+                  label: string;
+                  /**
+                   * 事件action参数表单
+                   */
+                  args?: FunctionComponent<{
+                    args?: Record<string, any>;
+                    updateArgs?: (newArgs: Record<string, any>) => void;
+                  }>;
+                  /**
+                   * 事件action默认参数
+                   */
+                  defaultArgs?: Record<string, any>;
+                };
+              };
+            };
+          }>;
+        }
+      : { events?: never }) &
+    ("children" extends keyof R["rendererDef"]
+      ? {
+          /**
+           * 组件子插槽中文名配置
+           */
+          children: Record<NonNullable<R["rendererDef"]["children"]>, string>;
+        }
+      : { children?: never }),
 >(renderer: R, meta: M) {
   return {
     ...meta,

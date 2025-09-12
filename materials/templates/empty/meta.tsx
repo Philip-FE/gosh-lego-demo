@@ -23,6 +23,9 @@ const meta = defineMeta(Empty, {
       </>
     );
   },
+  defaultOptions: {
+    title: "",
+  },
 });
 
 export default meta;

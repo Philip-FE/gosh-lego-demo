@@ -34,7 +34,7 @@ export interface Schema {
       id: ID;
       name: string;
       style?: Record<string, any>;
-      options: OptionsConfig;
+      options?: OptionsConfig;
       events?: EventsConfig;
       children?: Record<string, ID[]>;
     }
