@@ -3,7 +3,6 @@ import { useMaterialStore } from "../../../../store/material";
 import { useSchemaStore } from "../../../../store/schema";
 import { useMemoizedFn } from "ahooks";
 import { Form, InputNumber } from "antd";
-import { useEffect } from "react";
 
 export const StylesForm = () => {
   const { schema, updateSchema } = useSchemaStore();

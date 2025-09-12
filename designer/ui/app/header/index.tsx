@@ -13,7 +13,7 @@ export const Header = () => {
         onClick={() => {
           copy(JSON.stringify(schema, null, 2));
           message.success(
-            "复制成功，把内容粘贴到app/no-treeshaking-renderer/schema.json"
+            "复制成功，把内容粘贴到app/no-tree-shaking-renderer/schema.json"
           );
         }}
       >
@@ -21,7 +21,7 @@ export const Header = () => {
       </Button>
       <Button
         onClick={() => {
-          window.open("/no-tree-shaking-renderer.html");
+          window.open("/gosh-lego-demo/no-tree-shaking-renderer.html");
         }}
       >
         查看应用（无treeshaking）
@@ -31,7 +31,9 @@ export const Header = () => {
         onClick={async () => {
           const code = await generateAppCode(schema);
           copy(code);
-          message.success("复制成功，把内容粘贴到apps/demo/app.tsx");
+          message.success(
+            "复制成功，把内容粘贴到apps/tree-shaking-renderer/app.tsx"
+          );
         }}
       >
         复制代码
@@ -39,7 +41,7 @@ export const Header = () => {
       <Button
         type="primary"
         onClick={() => {
-          window.open("/tree-shaking-renderer.html");
+          window.open("/gosh-lego-demo/tree-shaking-renderer.html");
         }}
       >
         查看应用（treeshaking）
